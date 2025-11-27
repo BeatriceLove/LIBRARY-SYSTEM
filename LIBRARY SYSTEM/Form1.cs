@@ -27,9 +27,9 @@ namespace LIBRARY_SYSTEM
 
         private void btnRegister_Click(object sender, EventArgs e)
         {
-            if(txtName.Text == "" || txtContact.Text == "")
+            if (txtName.Text == "" || txtContact.Text == "")
             {
-                MessageBox.Show("Please Enter your Name and Contact Number");
+                MessageBox.Show("Please enter your name and contact number.");
                 return;
             }
 
@@ -38,18 +38,16 @@ namespace LIBRARY_SYSTEM
                 using (SqlConnection con = new SqlConnection(connectionString))
                 {
                     con.Open();
-                    string query = "INSERT INTO Borrowers (Names, Contacts) VALUES (@Names, @Contacts)";
+
+                    string query = "INSERT INTO Borrowers (Name, ContactInfo) VALUES (@Name, @ContactInfo)";
                     SqlCommand cmd = new SqlCommand(query, con);
-                    cmd.Parameters.AddWithValue("@Names", txtName.Text);
-                    cmd.Parameters.AddWithValue("@Contacts", txtContact.Text);
+                    cmd.Parameters.AddWithValue("@Name", txtName.Text);
+                    cmd.Parameters.AddWithValue("@ContactInfo", txtContact.Text);
 
                     cmd.ExecuteNonQuery();
-                    con.Close();
-
-                    MessageBox.Show("Borrower registered successfully.");
-                    txtName.Clear();
-                    txtContact.Clear();
                 }
+
+                MessageBox.Show("Borrower registered successfully.");
 
                 Form3 next = new Form3();
                 next.Show();
@@ -57,7 +55,7 @@ namespace LIBRARY_SYSTEM
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error:" + ex.Message);
+                MessageBox.Show("Error: " + ex.Message);
             }
         }
     }

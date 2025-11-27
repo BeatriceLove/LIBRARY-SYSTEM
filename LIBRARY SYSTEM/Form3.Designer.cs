@@ -30,7 +30,7 @@
         {
             panel2 = new Panel();
             btnReturn = new Button();
-            txtBOOKID = new TextBox();
+            txtBorrowerID = new TextBox();
             label8 = new Label();
             label7 = new Label();
             label6 = new Label();
@@ -47,6 +47,7 @@
             panel1 = new Panel();
             dateTimePicker2 = new DateTimePicker();
             dateTimePicker1 = new DateTimePicker();
+            textBox1 = new TextBox();
             panel2.SuspendLayout();
             panel3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridViewRecords).BeginInit();
@@ -57,7 +58,6 @@
             // 
             panel2.BackColor = Color.FloralWhite;
             panel2.Controls.Add(btnReturn);
-            panel2.Controls.Add(txtBOOKID);
             panel2.Controls.Add(label8);
             panel2.Controls.Add(label7);
             panel2.Controls.Add(label6);
@@ -80,13 +80,13 @@
             btnReturn.UseVisualStyleBackColor = false;
             btnReturn.Click += btnReturn_Click;
             // 
-            // txtBOOKID
+            // txtBorrowerID
             // 
-            txtBOOKID.Location = new Point(101, 67);
-            txtBOOKID.Margin = new Padding(3, 4, 3, 4);
-            txtBOOKID.Name = "txtBOOKID";
-            txtBOOKID.Size = new Size(292, 27);
-            txtBOOKID.TabIndex = 3;
+            txtBorrowerID.Location = new Point(101, 33);
+            txtBorrowerID.Margin = new Padding(3, 4, 3, 4);
+            txtBorrowerID.Name = "txtBorrowerID";
+            txtBorrowerID.Size = new Size(292, 27);
+            txtBorrowerID.TabIndex = 3;
             // 
             // label8
             // 
@@ -232,6 +232,8 @@
             // panel1
             // 
             panel1.BackColor = Color.FloralWhite;
+            panel1.Controls.Add(textBox1);
+            panel1.Controls.Add(txtBorrowerID);
             panel1.Controls.Add(dateTimePicker2);
             panel1.Controls.Add(btnBorrow);
             panel1.Controls.Add(dateTimePicker1);
@@ -263,6 +265,14 @@
             dateTimePicker1.Size = new Size(228, 27);
             dateTimePicker1.TabIndex = 6;
             // 
+            // textBox1
+            // 
+            textBox1.Location = new Point(256, 287);
+            textBox1.Margin = new Padding(3, 4, 3, 4);
+            textBox1.Name = "textBox1";
+            textBox1.Size = new Size(292, 27);
+            textBox1.TabIndex = 9;
+            // 
             // Form3
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -289,7 +299,7 @@
         #endregion
         private Panel panel2;
         private Label label1;
-        private TextBox txtBOOKID;
+        private TextBox txtBorrowerID;
         private Label label8;
         private Label label7;
         private Label label6;
@@ -306,5 +316,6 @@
         private Panel panel1;
         private DateTimePicker dateTimePicker1; 
         private System.Windows.Forms.DateTimePicker dateTimePicker2;
+        private TextBox textBox1;
     }
 }

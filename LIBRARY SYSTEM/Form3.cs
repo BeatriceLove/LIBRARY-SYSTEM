@@ -41,23 +41,34 @@ namespace LIBRARY_SYSTEM
 
         private void button1_Click(object sender, EventArgs e)
         {
-            DateTime dateToReturn = dateTimePicker2.Value;
             int bookID = int.Parse(txtBookIDBorrow.Text);
+            int borrowerID = int.Parse(txtBorrowerID.Text);
+            DateTime borrowDate = dateTimePicker1.Value;
+            DateTime returnDate = dateTimePicker2.Value;
 
             try
             {
-                SqlConnection con = new SqlConnection(@"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=LibraryDB;Integrated Security=True");
-                con.Open();
-                string query = "INSERT INTO BorrowRecords (BookID, DateToReturn) VALUES (@BookID, @DateToReturn)";
-                SqlCommand cmd = new SqlCommand(query, con);
-                cmd.Parameters.AddWithValue("@BookID", bookID);
-                cmd.Parameters.AddWithValue("@DateToReturn", dateToReturn);
-                cmd.ExecuteNonQuery();
-                MessageBox.Show("Book borrowed successfully.");
-                con.Close();
+                using (SqlConnection con = new SqlConnection(connectionString))
+                {
+                    con.Open();
 
-                LoadData(); // 🔁
-                //Refresh DataGridView
+                    string query = @"INSERT INTO BorrowRecords 
+                            (BookID, BorrowerID, BorrowDate, ReturnDate) 
+                             VALUES (@BookID, @BorrowerID, @BorrowDate, NULL)";
+
+                    SqlCommand cmd = new SqlCommand(query, con);
+                   // cmd.Parameters.AddWithValue("@BookID", bookID);
+                    cmd.Parameters.AddWithValue("@BorrowerID", borrowerID);
+                    //cmd.Parameters.AddWithValue("@BorrowDate", borrowDate);
+                    cmd.Parameters.AddWithValue("@BookID", int.Parse(txtBookIDBorrow.Text));
+                    cmd.Parameters.AddWithValue("@BorrowDate", dateTimePicker2.Value);
+
+
+                    cmd.ExecuteNonQuery();
+                }
+
+                MessageBox.Show("Book borrowed successfully.");
+                LoadData();
             }
             catch (Exception ex)
             {
@@ -75,7 +86,7 @@ namespace LIBRARY_SYSTEM
                 using (SqlCommand cmd = new SqlCommand(query, con))
                 {
 
-                    cmd.Parameters.AddWithValue("@BookID", int.Parse(txtBOOKID.Text));
+                    cmd.Parameters.AddWithValue("@BookID", int.Parse(txtBorrowerID.Text));
                     
                     con.Open();
                     int rows = cmd.ExecuteNonQuery();
@@ -86,7 +97,7 @@ namespace LIBRARY_SYSTEM
                     else
                         MessageBox.Show("No borrowed record found for this book.");
 
-                    txtBOOKID.Clear();
+                    txtBorrowerID.Clear();
                 }
             }
         }
@@ -100,45 +111,20 @@ namespace LIBRARY_SYSTEM
         {
             using (SqlConnection con = new SqlConnection(connectionString))
             {
-                /*con.Open();
-                SqlDataAdapter adapter = new SqlDataAdapter(
-                    @"SELECT b.BookID, b.Title, b.Author, br.Name AS BorrowerName, r.BorrowDate, r.ReturnDate
-              FROM Books b
-              LEFT JOIN BorrowRecords r ON b.BookID = r.BookID
-              LEFT JOIN Borrowers br ON r.BorrowerID = br.BorrowerID", con);
+                con.Open();
+
+                string query = @"
+            SELECT r.RecordID, b.Title, br.Name AS BorrowerName,
+                   r.BorrowDate, r.ReturnDate
+            FROM BorrowRecords r
+            INNER JOIN Books b ON r.BookID = b.BookID
+            INNER JOIN Borrowers br ON r.BorrowerID = br.BorrowerID";
+
+                SqlDataAdapter da = new SqlDataAdapter(query, con);
                 DataTable dt = new DataTable();
-                adapter.Fill(dt);
+                da.Fill(dt);
+
                 dataGridViewRecords.DataSource = dt;
-                con.Close();
-                */
-                try
-                {
-                    using (SqlConnection conn = new SqlConnection("Server=(localdb)\\MSSQLLocalDB;Database=LibraryDB;Trusted_Connection=True;"))
-                    {
-                        conn.Open();
-
-                        // Load borrowed books for the current user
-                        string query = @"
-                SELECT b.BorrowId, bk.Title, b.DateBorrowed, b.DateToReturn, b.DateReturned
-                FROM BorrowedBooks b
-                INNER JOIN Books bk ON b.BookId = bk.BookId
-                WHERE b.UserId = @uid";
-
-                        SqlCommand cmd = new SqlCommand(query, conn);
-                        cmd.Parameters.AddWithValue("@BookID", txtBookIDBorrow);
-                        cmd.Parameters.AddWithValue("@BorrowDate", dateTimePicker2);
-
-                        SqlDataAdapter da = new SqlDataAdapter(cmd);
-                        DataTable dt = new DataTable();
-                        da.Fill(dt);
-
-                        dataGridViewRecords.DataSource = dt;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error loading borrowed books: " + ex.Message);
-                }
             }
         }
 
